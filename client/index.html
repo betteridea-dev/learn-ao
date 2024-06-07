@@ -1,5 +1,13 @@
 <html>
   <script>
+    function uint8ArrayToBase64(array) {
+      return btoa(String.fromCharCode.apply(null, [...array]));
+    }
+
+    function base64ToUint8Array(base64) {
+      return new Uint8Array([...atob(base64)].map((c) => c.charCodeAt(0)));
+    }
+
     async function connect() {
       await window.arweaveWallet.connect([
         'ACCESS_ADDRESS',
@@ -15,77 +23,28 @@
       const data = new TextEncoder().encode(address.innerText);
       const signature = await window.arweaveWallet.signMessage(data);
 
-      console.log(`Data - ${typeof data} - ${data}`);
-      console.log(`Signature - ${typeof signature} - ${signature}`);
-
-      console.log(String.fromCharCode.apply(null, new Uint8Array(signature)));
-
-      // const signatureString = new TextDecoder().decode(signature);
-
-      await verify(
-        address.innerText,
-        signature,
-        await window.arweaveWallet.getActivePublicKey(),
-        data,
-      );
-
-      return;
-
       fetch('http://localhost:3000/api/verify', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          address: address.innerText,
-          signature: signature,
-          pubkey: await window.arweaveWallet.getActivePublicKey(),
+          data: uint8ArrayToBase64(data),
+          signature: uint8ArrayToBase64(signature),
+          publicKey: await window.arweaveWallet.getActivePublicKey(),
         }),
       })
         .then((res) => res.json())
         .then((data) => {
-          console.log(data);
           document.getElementById('signature').innerText = JSON.stringify(data);
         });
-    }
-
-    async function verify(address, signature, publicKey, data) {
-      const hash = await crypto.subtle.digest('SHA-256', data);
-
-      const publicJWK = {
-        e: 'AQAB',
-        ext: true,
-        kty: 'RSA',
-        n: publicKey,
-      };
-
-      // import public jwk for verification
-      const verificationKey = await crypto.subtle.importKey(
-        'jwk',
-        publicJWK,
-        {
-          name: 'RSA-PSS',
-          hash: 'SHA-256',
-        },
-        false,
-        ['verify'],
-      );
-
-      // verify the signature by matching it with the hash
-      const isValidSignature = await crypto.subtle.verify(
-        { name: 'RSA-PSS', saltLength: 32 },
-        verificationKey,
-        signature,
-        hash,
-      );
-
-      console.log(`The signature is ${isValidSignature ? 'valid' : 'invalid'}`);
     }
   </script>
 
   <body>
     <button onclick="connect()">connect</button>
     <p id="address"></p>
+
     <button onclick="sign()">sign address</button>
     <p id="signature"></p>
   </body>
