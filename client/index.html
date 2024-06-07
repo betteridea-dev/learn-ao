@@ -1,0 +1,48 @@
+<html>
+  <script>
+    async function connect() {
+      await window.arweaveWallet.connect([
+        'ACCESS_ADDRESS',
+        'SIGNATURE',
+        'ACCESS_PUBLIC_KEY',
+      ]);
+      const address = await window.arweaveWallet.getActiveAddress();
+      console.log(address);
+      document.getElementById('address').innerText = address;
+    }
+
+    async function sign() {
+      const data = new TextEncoder().encode(address.innerText);
+      const signature = await window.arweaveWallet.signMessage(data);
+
+      console.log(`Data - ${data}`);
+      console.log(`Signature - ${signature}`);
+
+      // const signatureString = new TextDecoder().decode(signature);
+
+      fetch('http://localhost:3000/api/verify', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          address: address.innerText,
+          signature: signature,
+          pubkey: await window.arweaveWallet.getActivePublicKey(),
+        }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
+          document.getElementById('signature').innerText = JSON.stringify(data);
+        });
+    }
+  </script>
+
+  <body>
+    <button onclick="connect()">connect</button>
+    <p id="address"></p>
+    <button onclick="sign()">sign address</button>
+    <p id="signature"></p>
+  </body>
+</html>
