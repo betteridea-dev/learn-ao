@@ -21,8 +21,8 @@ export class AppController {
     const address = body.address;
     const uint8arr = Uint8Array.from(body.signature);
     const signature = uint8arr.buffer;
-    // console.log(address, signature);
 
+    // console.log(address, signature);
     console.log(signature);
 
     const hash = await crypto.subtle.digest('SHA-256', signature);
@@ -31,13 +31,6 @@ export class AppController {
       e: 'AQAB',
       ext: true,
       kty: 'RSA',
-      // !! You need to obtain this on your own !!
-      // possible ways are:
-      // - getting from ArConnect if available
-      // - storing it beforehand
-      // - if the wallet has made any transactions on the Arweave network
-      //   the public key is going to be the owner field of the mentioned
-      //   transactions
       n: body.pubkey,
     };
 
