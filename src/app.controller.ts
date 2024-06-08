@@ -1,6 +1,15 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
-import { AppService } from './app.service';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Request,
+  UseGuards,
+} from '@nestjs/common';
 import { base64ToUint8Array } from './lib/utils';
+import { LocalAuthGuard } from './auth/local-auth.guard';
+import { AuthService } from './auth/auth.service';
+import { JwtAuthGuard } from './auth/jwt-auth.guard';
 
 class VerifyDTO {
   publicKey: string;
@@ -8,13 +17,25 @@ class VerifyDTO {
   data: string;
 }
 
-@Controller('api')
+@Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  constructor(private authService: AuthService) {}
 
-  @Get()
+  @UseGuards(LocalAuthGuard)
+  @Post('auth/login')
+  async login(@Request() req) {
+    return this.authService.login(req.user);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('profile')
+  getProfile(@Request() req) {
+    return req.user;
+  }
+
+  @Get('hello')
   getHello(): string {
-    return this.appService.getHello();
+    return 'Hello World';
   }
 
   @Post('verify')
