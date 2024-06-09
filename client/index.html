@@ -23,7 +23,7 @@
       const data = new TextEncoder().encode(address.innerText);
       const signature = await window.arweaveWallet.signMessage(data);
 
-      fetch('http://localhost:3000/api/verify', {
+      fetch('http://localhost:3000/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -32,6 +32,9 @@
           data: uint8ArrayToBase64(data),
           signature: uint8ArrayToBase64(signature),
           publicKey: await window.arweaveWallet.getActivePublicKey(),
+          walletAddress: address.innerText,
+          username: 'x',
+          password: 'x',
         }),
       })
         .then((res) => res.json())
