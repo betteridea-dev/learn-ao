@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { User, UsersService } from '../users/users.service';
+import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { base64ToUint8Array } from 'src/lib/utils';
+import { User } from '@prisma/client';
 
 class VerifyDTO {
   publicKey: string;
@@ -61,18 +62,21 @@ export class AuthService {
     return isValidSignature && decoded === walletAddress;
   }
 
-  async getOrCreateUser(walletAddress: string): Promise<User> {
+  async getOrCreateUser(
+    walletAddress: string,
+    publicKey: string,
+  ): Promise<User> {
     const user = await this.usersService.findByAddress(walletAddress);
 
     if (user) {
       return user;
     }
 
-    return this.usersService.create({ address: walletAddress });
+    return this.usersService.create({ walletAddress, publicKey });
   }
 
   async login(user: User) {
-    const payload = { ...user };
+    const payload = { id: user.id };
 
     return {
       access_token: this.jwtService.sign(payload),

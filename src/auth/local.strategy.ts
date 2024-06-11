@@ -3,7 +3,7 @@ import { PassportStrategy } from '@nestjs/passport';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Request } from 'express';
-import { User } from 'src/users/users.service';
+import { User } from '@prisma/client';
 
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy) {
@@ -29,7 +29,10 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
       throw new UnauthorizedException();
     }
 
-    const user = await this.authService.getOrCreateUser(walletAddress);
+    const user = await this.authService.getOrCreateUser(
+      walletAddress,
+      publicKey,
+    );
 
     if (!user) {
       throw new UnauthorizedException();
