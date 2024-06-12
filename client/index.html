@@ -15,7 +15,7 @@
         'ACCESS_PUBLIC_KEY',
       ]);
       const address = await window.arweaveWallet.getActiveAddress();
-      console.log(address);
+
       document.getElementById('address').innerText = address;
     }
 
@@ -39,13 +39,15 @@
       })
         .then((res) => res.json())
         .then((data) => {
-          document.getElementById('signature').innerText = JSON.stringify(data);
+          document.getElementById('signature').innerText = JSON.stringify(
+            data?.access_token,
+          );
         });
     }
   </script>
 
   <body>
-    <button onclick="connect()">connect</button>
+    <button onclick="connect()">Connect Wallet</button>
     <p id="address"></p>
 
     <button onclick="sign()">sign address</button>
