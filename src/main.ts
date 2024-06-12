@@ -11,6 +11,17 @@ async function bootstrap() {
     .setDescription('Learn AO API description')
     .setVersion('1.0')
     .addTag('learn-ao')
+    .addBearerAuth(
+      {
+        description: `Please enter token in following format: Bearer <JWT>`,
+        name: 'Authorization',
+        bearerFormat: 'Bearer',
+        scheme: 'Bearer',
+        type: 'http',
+        in: 'Header',
+      },
+      'access-token',
+    )
     .build();
 
   const document = SwaggerModule.createDocument(app, config);

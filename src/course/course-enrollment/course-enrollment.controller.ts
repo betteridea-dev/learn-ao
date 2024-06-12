@@ -8,6 +8,7 @@ import {
 } from '@nestjs/common';
 import { CourseEnrollmentService } from './course-enrollment.service';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Controller('course-enrollment')
 export class CourseEnrollmentController {
@@ -16,6 +17,7 @@ export class CourseEnrollmentController {
   ) {}
 
   @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth('access-token')
   @Post()
   async enrollUserInCourse(@Body() body: { courseId: string }, @Request() req) {
     return this.courseEnrollmentService.enrollUserInCourse(
@@ -25,6 +27,7 @@ export class CourseEnrollmentController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth('access-token')
   @Get()
   async getUserCourses(@Request() req) {
     return this.courseEnrollmentService.getUserCourses(parseInt(req.user.id));
