@@ -7,9 +7,14 @@ import {
   Delete,
   Body,
   ParseIntPipe,
+  Req,
+  UseGuards,
 } from '@nestjs/common';
 import { InvitationService } from './invitation.service';
 import { CreateInvitationDto } from './dto/create-invitation.dto';
+import { CheckUserInvitationDto } from './dto/chech-user-invitation.dto';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Controller('invitation')
 export class InvitationController {
@@ -48,5 +53,18 @@ export class InvitationController {
   @Delete(':id')
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.invitationService.remove(+id);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth('access-token')
+  @Post('user')
+  checkUserInvitation(
+    @Body() { invitationCode }: CheckUserInvitationDto,
+    @Req() req,
+  ) {
+    return this.invitationService.checkUserInvitation({
+      invitationCode,
+      userId: req.user.id,
+    });
   }
 }
