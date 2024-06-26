@@ -6,6 +6,7 @@ import {
   Param,
   Delete,
   Body,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { InvitationService } from './invitation.service';
 import { CreateInvitationDto } from './dto/create-invitation.dto';
@@ -24,18 +25,28 @@ export class InvitationController {
     return this.invitationService.findAll();
   }
 
+  @Get('active')
+  findActive() {
+    return this.invitationService.findActive();
+  }
+
+  @Get('used')
+  findUsed() {
+    return this.invitationService.findUsed();
+  }
+
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id', ParseIntPipe) id: number) {
     return this.invitationService.findOne(+id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string) {
+  update(@Param('id', ParseIntPipe) id: number) {
     return this.invitationService.update(+id);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id', ParseIntPipe) id: number) {
     return this.invitationService.remove(+id);
   }
 }

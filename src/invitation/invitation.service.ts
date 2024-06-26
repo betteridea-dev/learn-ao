@@ -37,6 +37,30 @@ export class InvitationService {
     return invitationCodes;
   }
 
+  async findActive(): Promise<InvitationCode[]> {
+    const invitationCodes = await this.prisma.invitationCode.findMany({
+      where: {
+        usedBy: {
+          equals: null,
+        },
+      },
+    });
+
+    return invitationCodes;
+  }
+
+  async findUsed(): Promise<InvitationCode[]> {
+    const invitationCodes = await this.prisma.invitationCode.findMany({
+      where: {
+        usedBy: {
+          not: null,
+        },
+      },
+    });
+
+    return invitationCodes;
+  }
+
   async findOne(id: number): Promise<InvitationCode> {
     const invitationCode = await this.prisma.invitationCode.findUnique({
       where: {
