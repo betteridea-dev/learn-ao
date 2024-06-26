@@ -20,10 +20,27 @@ export class UsersService {
     return newUser;
   }
 
-  async findById(id: number): Promise<User | undefined> {
+  async findById(id: number): Promise<User | null> {
     const user = await this.prisma.user.findUnique({
       where: {
         id,
+      },
+    });
+
+    return user;
+  }
+
+  async findByIdForReq(
+    id: number,
+  ): Promise<Pick<User, 'id' | 'email' | 'isInvited'> | null> {
+    const user = await this.prisma.user.findUnique({
+      where: {
+        id,
+      },
+      select: {
+        id: true,
+        email: true,
+        isInvited: true,
       },
     });
 
