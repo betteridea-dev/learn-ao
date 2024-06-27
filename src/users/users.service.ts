@@ -32,7 +32,7 @@ export class UsersService {
 
   async findByIdForReq(
     id: number,
-  ): Promise<Pick<User, 'id' | 'email' | 'isInvited'> | null> {
+  ): Promise<Pick<User, 'id' | 'email' | 'invitationCodeId'> | null> {
     const user = await this.prisma.user.findUnique({
       where: {
         id,
@@ -40,7 +40,7 @@ export class UsersService {
       select: {
         id: true,
         email: true,
-        isInvited: true,
+        invitationCodeId: true,
       },
     });
 

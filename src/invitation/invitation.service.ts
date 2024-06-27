@@ -44,8 +44,8 @@ export class InvitationService {
   async findActive(): Promise<InvitationCode[]> {
     const invitationCodes = await this.prisma.invitationCode.findMany({
       where: {
-        usedBy: {
-          equals: null,
+        isUsed: {
+          equals: false,
         },
       },
     });
@@ -56,8 +56,8 @@ export class InvitationService {
   async findUsed(): Promise<InvitationCode[]> {
     const invitationCodes = await this.prisma.invitationCode.findMany({
       where: {
-        usedBy: {
-          not: null,
+        isUsed: {
+          equals: true,
         },
       },
     });
@@ -130,7 +130,7 @@ export class InvitationService {
       throw new NotFoundException('User not found');
     }
 
-    if (user.isInvited) {
+    if (user.invitationCodeId) {
       throw new BadRequestException('You have already been invited');
     }
 
@@ -146,24 +146,9 @@ export class InvitationService {
           connect: {
             id: user.id,
           },
-          // update: {
-          //   isInvited: true,
-          // },
         },
       },
     });
-
-    // TODO: Include in single transaction
-    const res2 = await this.prisma.user.update({
-      where: {
-        id: user.id,
-      },
-      data: {
-        isInvited: true,
-      },
-    });
-
-    console.log(`RES - ${res}`);
 
     return res;
   }

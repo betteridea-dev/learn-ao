@@ -14,16 +14,16 @@ datasource db {
 }
 
 model User {
-  id            Int     @id @default(autoincrement())
-  walletAddress String  @unique
-  publicKey     String  @unique
-  email         String? @unique
-  isInvited     Boolean @default(false)
+  id               Int     @id @default(autoincrement())
+  walletAddress    String  @unique
+  publicKey        String  @unique
+  email            String? @unique
+  invitationCodeId Int?    @unique
 
   Profile              Profile?
   enrollments          Enrollment[]
   AssignmentCompletion AssignmentCompletion[]
-  InvitationCode       InvitationCode?
+  InvitationCode       InvitationCode?        @relation(fields: [invitationCodeId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -119,9 +119,8 @@ model InvitationCode {
   id     Int     @id @default(autoincrement())
   code   String  @unique
   isUsed Boolean @default(false)
-  usedBy Int?    @unique
 
-  User User? @relation(fields: [usedBy], references: [id])
+  User User?
 
   usedAt    DateTime?
   createdAt DateTime  @default(now())
