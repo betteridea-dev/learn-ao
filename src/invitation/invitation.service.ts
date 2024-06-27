@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ForbiddenException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -94,11 +95,15 @@ export class InvitationService {
   }
 
   update(id: number) {
-    throw new Error(`Invitation code once generated cannot be updated - ${id}`);
+    throw new ForbiddenException(
+      `Invitation code once generated cannot be updated - ${id}`,
+    );
   }
 
   remove(id: number) {
-    throw new Error(`Invitation code once generated cannot be deleted - ${id}`);
+    throw new ForbiddenException(
+      `Invitation code once generated cannot be deleted - ${id}`,
+    );
   }
 
   async checkUserInvitation({
