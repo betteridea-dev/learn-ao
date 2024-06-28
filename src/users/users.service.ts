@@ -14,6 +14,9 @@ export class UsersService {
       data: {
         publicKey,
         walletAddress,
+        Profile: {
+          create: {},
+        },
       },
     });
 
