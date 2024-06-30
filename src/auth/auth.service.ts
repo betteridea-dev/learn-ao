@@ -3,7 +3,6 @@ import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { base64ToUint8Array } from 'src/lib/utils';
 import { User } from '@prisma/client';
-// import crypto from 'crypto';
 
 class VerifyDTO {
   publicKey: string;
@@ -36,8 +35,6 @@ export class AuthService {
       'SHA-256',
       base64ToUint8Array(data),
     );
-
-    console.log('CRYPTO', crypto);
 
     // import public jwk for verification
     const verificationKey = await crypto.subtle.importKey(
