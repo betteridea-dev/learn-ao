@@ -26,7 +26,7 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
     });
 
     if (!isValidSignature) {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException('Invalid signature');
     }
 
     const user = await this.authService.getOrCreateUser(
@@ -35,7 +35,9 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
     );
 
     if (!user) {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException(
+        'Failed to find or create user, please try again.',
+      );
     }
 
     return user;
