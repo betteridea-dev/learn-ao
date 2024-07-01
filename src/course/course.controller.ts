@@ -33,6 +33,11 @@ export class CourseController {
     return this.courseService.findOne(id);
   }
 
+  @Get(':id/detailed')
+  findOneDetailed(@Param('id', ParseIntPipe) id: number) {
+    return this.courseService.findOneDetailed(id);
+  }
+
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth('access-token')
   @Patch(':id')

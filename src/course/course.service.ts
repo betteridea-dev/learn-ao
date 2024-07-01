@@ -33,7 +33,12 @@ export class CourseService {
         id,
       },
       include: {
-        Module: true,
+        Module: {
+          include: {
+            chapter: true,
+            Assignment: true,
+          },
+        },
       },
     });
 
