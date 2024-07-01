@@ -6,14 +6,22 @@ import { CourseEnrollmentController } from './course-enrollment/course-enrollmen
 import { CourseEnrollmentService } from './course-enrollment/course-enrollment.service';
 import { ModuleController } from './module/module.controller';
 import { ModuleService } from './module/module.service';
+import { ChapterController } from './chapter/chapter.controller';
+import { ChapterService } from './chapter/chapter.service';
 
 @Module({
-  controllers: [CourseController, CourseEnrollmentController, ModuleController],
+  controllers: [
+    CourseController,
+    CourseEnrollmentController,
+    ModuleController,
+    ChapterController,
+  ],
   providers: [
     CourseService,
     PrismaService,
     CourseEnrollmentService,
     ModuleService,
+    ChapterService,
   ],
 })
 export class CourseModule {}

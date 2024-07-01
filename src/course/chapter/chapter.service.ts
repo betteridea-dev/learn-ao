@@ -2,44 +2,44 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 
 @Injectable()
-export class ModuleService {
+export class ChapterService {
   constructor(private readonly prisma: PrismaService) {}
 
-  create() {
+  async create() {
     throw new BadRequestException(
-      'Module creation allowed only through Prisma Admin',
+      'Chapter creation allowed only through Prisma Admin',
     );
   }
 
-  async findAllByCourse(courseId: number) {
-    const modules = await this.prisma.module.findMany({
+  async findAllByModule(moduleId: number) {
+    const chapters = await this.prisma.chapter.findMany({
       where: {
-        courseId,
+        moduleId,
       },
     });
 
-    return modules;
+    return chapters;
   }
 
   async findOne(id: number) {
-    const module = await this.prisma.module.findUnique({
+    const chapter = await this.prisma.chapter.findUnique({
       where: {
         id,
       },
     });
 
-    return module;
+    return chapter;
   }
 
   async update() {
     throw new BadRequestException(
-      'Module updation allowed only through Prisma Admin',
+      'Chapter updation allowed only through Prisma Admin',
     );
   }
 
   async remove() {
     throw new BadRequestException(
-      'Module deletion allowed only through Prisma Admin',
+      'Chapter deletion allowed only through Prisma Admin',
     );
   }
 }
