@@ -33,6 +33,11 @@ export class CourseController {
     return this.courseService.findOne(id);
   }
 
+  @Get(':id/semi-detailed')
+  findOneSemiDetailed(@Param('id', ParseIntPipe) id: number) {
+    return this.courseService.findOneSemiDetailed(id);
+  }
+
   @Get(':id/detailed')
   findOneDetailed(@Param('id', ParseIntPipe) id: number) {
     return this.courseService.findOneDetailed(id);

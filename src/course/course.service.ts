@@ -27,6 +27,43 @@ export class CourseService {
     return course;
   }
 
+  async findOneSemiDetailed(id: number): Promise<Course> {
+    const course = await this.prisma.course.findUnique({
+      where: {
+        id,
+      },
+      include: {
+        Module: {
+          select: {
+            id: true,
+            index: true,
+            title: true,
+            createdAt: true,
+            updatedAt: true,
+            chapter: {
+              select: {
+                id: true,
+                index: true,
+                createdAt: true,
+                updatedAt: true,
+              },
+            },
+            Assignment: {
+              select: {
+                id: true,
+                title: true,
+                createdAt: true,
+                updatedAt: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    return course;
+  }
+
   async findOneDetailed(id: number): Promise<Course> {
     const course = await this.prisma.course.findUnique({
       where: {
