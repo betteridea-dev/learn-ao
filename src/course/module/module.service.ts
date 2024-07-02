@@ -31,6 +31,62 @@ export class ModuleService {
     return module;
   }
 
+  async findOneDetailed(id: number) {
+    const module = await this.prisma.module.findUnique({
+      where: {
+        id,
+      },
+      include: {
+        chapter: {
+          select: {
+            id: true,
+            index: true,
+            text: true,
+            videoUrl: true,
+            createdAt: true,
+            updatedAt: true,
+          },
+        },
+        Assignment: true,
+      },
+    });
+
+    return module;
+  }
+
+  async findOneSemiDetailed(id: number) {
+    const module = await this.prisma.module.findUnique({
+      where: {
+        id,
+      },
+      select: {
+        id: true,
+        index: true,
+        title: true,
+        createdAt: true,
+        updatedAt: true,
+        Assignment: {
+          select: {
+            id: true,
+            title: true,
+            createdAt: true,
+            updatedAt: true,
+          },
+        },
+        chapter: {
+          select: {
+            id: true,
+            index: true,
+            createdAt: true,
+            updatedAt: true,
+          },
+        },
+      },
+    });
+
+    return module;
+  }
+
   async update() {
     throw new BadRequestException(
       'Module updation allowed only through Prisma Admin',

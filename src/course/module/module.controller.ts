@@ -34,8 +34,18 @@ export class ModuleController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id') id: number) {
     return this.moduleService.findOne(+id);
+  }
+
+  @Get(':id/detailed')
+  findOneDetailed(@Param('id') id: number) {
+    return this.moduleService.findOneDetailed(+id);
+  }
+
+  @Get(':id/semi-detailed')
+  findOneSemiDetailed(@Param('id') id: number) {
+    return this.moduleService.findOneSemiDetailed(+id);
   }
 
   @UseGuards(JwtAuthGuard)
