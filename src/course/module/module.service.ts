@@ -41,6 +41,7 @@ export class ModuleService {
           select: {
             id: true,
             index: true,
+            title: true,
             text: true,
             videoUrl: true,
             createdAt: true,
@@ -77,6 +78,7 @@ export class ModuleService {
           select: {
             id: true,
             index: true,
+            title: true,
             createdAt: true,
             updatedAt: true,
           },

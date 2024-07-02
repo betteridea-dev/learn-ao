@@ -29,6 +29,7 @@ export class ChapterService {
       select: {
         id: true,
         index: true,
+        title: true,
         moduleId: true,
         updatedAt: true,
         createdAt: true,

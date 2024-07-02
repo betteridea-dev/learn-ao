@@ -75,6 +75,7 @@ model Module {
 model Chapter {
   id       Int     @id @default(autoincrement())
   index    Int
+  title    String  @default("")
   text     String?
   videoUrl String?
   moduleId Int

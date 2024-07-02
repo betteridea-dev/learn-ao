@@ -44,6 +44,7 @@ export class CourseService {
               select: {
                 id: true,
                 index: true,
+                title: true,
                 createdAt: true,
                 updatedAt: true,
               },
