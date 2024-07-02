@@ -26,6 +26,23 @@ export class ChapterService {
       where: {
         id,
       },
+      select: {
+        id: true,
+        index: true,
+        moduleId: true,
+        updatedAt: true,
+        createdAt: true,
+      },
+    });
+
+    return chapter;
+  }
+
+  async findOneDetailed(id: number) {
+    const chapter = await this.prisma.chapter.findUnique({
+      where: {
+        id,
+      },
     });
 
     return chapter;

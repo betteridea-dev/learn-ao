@@ -34,8 +34,13 @@ export class ChapterController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id', ParseIntPipe) id: number) {
     return this.chapterService.findOne(+id);
+  }
+
+  @Get(':id/detailed')
+  findOneDetailed(@Param('id', ParseIntPipe) id: number) {
+    return this.chapterService.findOneDetailed(+id);
   }
 
   @UseGuards(JwtAuthGuard)
