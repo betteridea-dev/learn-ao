@@ -7,6 +7,9 @@ import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { CourseModule } from './course/course.module';
 import { InvitationModule } from './invitation/invitation.module';
+import { APP_GUARD } from '@nestjs/core';
+import { RolesGuard } from './auth/rbac/roles.guard';
+import { JwtAuthGuard } from './auth/jwt-auth.guard';
 
 @Module({
   imports: [
@@ -22,6 +25,15 @@ import { InvitationModule } from './invitation/invitation.module';
     InvitationModule,
   ],
   controllers: [AppController],
-  providers: [],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
+    },
+  ],
 })
 export class AppModule {}

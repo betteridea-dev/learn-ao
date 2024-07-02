@@ -15,7 +15,12 @@ import { CreateInvitationDto } from './dto/create-invitation.dto';
 import { CheckUserInvitationDto } from './dto/chech-user-invitation.dto';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { ApiBearerAuth } from '@nestjs/swagger';
+import { Roles } from 'src/auth/rbac/roles.decorator';
+import { UserRole } from '@prisma/client';
 
+@ApiBearerAuth('access-token')
+@UseGuards(JwtAuthGuard)
+@Roles(UserRole.ADMIN)
 @Controller('invitation')
 export class InvitationController {
   constructor(private readonly invitationService: InvitationService) {}
@@ -55,8 +60,7 @@ export class InvitationController {
     return this.invitationService.remove(+id);
   }
 
-  @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth('access-token')
+  @Roles(UserRole.USER, UserRole.ADMIN)
   @Post('user')
   checkUserInvitation(
     @Body() { invitationCode }: CheckUserInvitationDto,

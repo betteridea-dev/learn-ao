@@ -14,11 +14,12 @@ datasource db {
 }
 
 model User {
-  id               Int     @id @default(autoincrement())
-  walletAddress    String  @unique
-  publicKey        String  @unique
-  email            String? @unique
-  invitationCodeId Int?    @unique
+  id               Int      @id @default(autoincrement())
+  walletAddress    String   @unique
+  publicKey        String   @unique
+  email            String?  @unique
+  invitationCodeId Int?     @unique
+  role             UserRole @default(USER)
 
   Profile              Profile?
   enrollments          Enrollment[]
@@ -27,6 +28,11 @@ model User {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+enum UserRole {
+  USER
+  ADMIN
 }
 
 model Profile {

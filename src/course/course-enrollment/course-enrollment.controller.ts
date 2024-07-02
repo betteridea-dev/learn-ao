@@ -11,14 +11,14 @@ import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { EnrollCourseDTO } from './dto/enroll-course.dto';
 
+@UseGuards(JwtAuthGuard)
+@ApiBearerAuth('access-token')
 @Controller('course-enrollment')
 export class CourseEnrollmentController {
   constructor(
     private readonly courseEnrollmentService: CourseEnrollmentService,
   ) {}
 
-  @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth('access-token')
   @Post()
   async enrollUserInCourse(@Body() body: EnrollCourseDTO, @Request() req) {
     return this.courseEnrollmentService.enrollUserInCourse(
@@ -27,8 +27,6 @@ export class CourseEnrollmentController {
     );
   }
 
-  @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth('access-token')
   @Get()
   async getUserCourses(@Request() req) {
     return this.courseEnrollmentService.getUserCourses(parseInt(req.user.id));

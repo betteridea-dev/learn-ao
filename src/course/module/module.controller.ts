@@ -6,13 +6,23 @@ import {
   Param,
   Delete,
   ParseIntPipe,
+  UseGuards,
 } from '@nestjs/common';
 import { ModuleService } from './module.service';
+import { Public } from 'src/auth/auth.decorator';
+import { ApiBearerAuth } from '@nestjs/swagger';
+import { UserRole } from '@prisma/client';
+import { Roles } from 'src/auth/rbac/roles.decorator';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
+@Public()
 @Controller('module')
 export class ModuleController {
   constructor(private readonly moduleService: ModuleService) {}
 
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth('access-token')
+  @Roles(UserRole.ADMIN)
   @Post()
   create() {
     return this.moduleService.create();
@@ -28,6 +38,9 @@ export class ModuleController {
     return this.moduleService.findOne(+id);
   }
 
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth('access-token')
+  @Roles(UserRole.ADMIN)
   @Patch(':id')
   update(@Param('id', ParseIntPipe) id: number) {
     console.log(`Module Updation - ${id}`);
@@ -35,6 +48,9 @@ export class ModuleController {
     return this.moduleService.update();
   }
 
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth('access-token')
+  @Roles(UserRole.ADMIN)
   @Delete(':id')
   remove(@Param('id', ParseIntPipe) id: number) {
     console.log(`Module Deletion - ${id}`);
