@@ -31,4 +31,11 @@ export class CourseEnrollmentController {
   async getUserCourses(@Request() req) {
     return this.courseEnrollmentService.getUserCourses(parseInt(req.user.id));
   }
+
+  @Get('detail')
+  async getUserCoursesDetailed(@Request() req) {
+    return this.courseEnrollmentService.getUserCoursesDetailed(
+      parseInt(req.user.id),
+    );
+  }
 }

@@ -25,4 +25,22 @@ export class CourseEnrollmentService {
 
     return userCourses;
   }
+
+  async getUserCoursesDetailed(userId: number) {
+    const userCourses = await this.prisma.enrollment.findMany({
+      where: {
+        userId: userId,
+      },
+      include: {
+        course: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
+    });
+
+    return userCourses;
+  }
 }
