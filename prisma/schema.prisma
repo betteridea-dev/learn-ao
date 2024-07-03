@@ -68,6 +68,8 @@ model Module {
   chapter    Chapter[]
   Assignment Assignment?
 
+  Enrollment Enrollment[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -81,6 +83,8 @@ model Chapter {
   moduleId Int
 
   module Module @relation(fields: [moduleId], references: [id])
+
+  Enrollment Enrollment[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -118,10 +122,17 @@ model Enrollment {
   userId   Int
   courseId Int
 
+  currentModuleId  Int?
+  currentChapterId Int?
+
   user   User   @relation(fields: [userId], references: [id])
   course Course @relation(fields: [courseId], references: [id])
 
+  CurrentModule  Module?  @relation(fields: [currentModuleId], references: [id])
+  CurrentChapter Chapter? @relation(fields: [currentChapterId], references: [id])
+
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@unique([userId, courseId])
 }
