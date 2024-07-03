@@ -79,7 +79,9 @@ export class AuthService {
     const payload = { id: user.id };
 
     return {
-      access_token: this.jwtService.sign(payload),
+      access_token: this.jwtService.sign(payload, {
+        expiresIn: user.role === 'ADMIN' ? '90d' : '7d',
+      }),
     };
   }
 }
